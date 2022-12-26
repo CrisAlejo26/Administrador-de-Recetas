@@ -38,7 +38,7 @@ def inicio():
             [6] - Salir del programa
             ''')
         eleccion_menu = input()
-    return (eleccion_menu)
+    return int(eleccion_menu)
 
 # ? Funcion mostrar categorias
 
@@ -92,65 +92,148 @@ def elegir_receta(lista):
         elegir = input("Escoge una receta: ")
     return lista[int(elegir) - 1]
 
+# ? Funcion leer una receta
 
+def leer_receta(receta):
+    print(Path.read_text(receta))
 
-menu = 0
+# ? Funcion crear una Receta
 
-# ! Ver una Receta
-if menu == 1:
-    # Mostrar Categorias
-    mis_categorias = mostrar_categorias(mi_ruta)
-    # Elegir categoria
-    mi_categoria = elegir_categoria(mis_categorias)
-    # Mostrar recetas
-    mis_recetas = mostrar_recetas(mi_categoria)
-    # Elegir recetas
-    mi_receta = elegir_receta(mis_recetas)
-    # leer receta
-    # Volver al inicio
-    pass
+def crear_receta(ruta):
+    existe = False
+    
+    while not existe:
+        print("Escribe el nombre de tu receta: ")
+        # Escribe el nombre con la extencion del archivo
+        nombre_receta = input() + '.txt'
+        print("Escribe tu nueva receta: ")
+        # Agrega el contenido que va a tener la receta
+        contenido_receta = input()
+        # Se genera la ruta nueva donde se crea
+        ruta_nueva = Path(ruta, nombre_receta)
+        
+        # Si el archivo o ruta no existe con ese nombre, entonces
+        if not os.path.exists(ruta_nueva):
+            # Creamos o escribimos la receta nueva en la direccion indicada, incluyendo el contenido
+            Path.write_text(ruta_nueva, contenido_receta)
+            print(f"Tu receta {nombre_receta} ha sido creada")
+            existe = True
+        else:
+            print("Lo siento, esa receta ya existe")
+    
+# ? Funcion crear una categoria
+
+def crear_categoria(ruta):
+    existe = False
+    
+    while not existe:
+        print("Escribe el nombre de tu categoria: ")
+        # Escribe el nombre con la extencion del archivo
+        nombre_categoria = input()
+        # Se genera la ruta nueva donde se crea
+        ruta_nueva = Path(ruta, nombre_categoria)
+        
+        # Si el archivo o ruta no existe con ese nombre, entonces
+        if not os.path.exists(ruta_nueva):
+            # Creamos el directorio o carpeta nueva
+            Path.mkdir(ruta_nueva)
+            print(f"Tu categoria {nombre_categoria} ha sido creada")
+            existe = True
+        else:
+            print("Lo siento, esa categoria ya existe")
+
+# ? Funcion eliminar receta
+
+def eliminar_receta(receta):
+    # Metodo para eliminar un arhivo con path
+    Path(receta).unlink()
+    print(f"La receta {receta.name} ha sido eliminada")
+
+# ? Funcion eliminar categoria
+
+def eliminar_categoria(categoria):
+    Path(categoria).rmdir()
+    print(f"La categoria {categoria.name} ha sido eliminada")
+
+# ? Funcion volver a inicio
+
+def volver_inicio():
+    eleccion_regresar = "x"
+    
+    while eleccion_regresar.lower() != "v":
+        eleccion_regresar = input("\nPresione v para volver al menu: ")
+
+finalizar_programa = False
+while not finalizar_programa:
+    menu = inicio()
+    # ! Ver una Receta
+    if menu == 1:
+        # Mostrar Categorias
+        mis_categorias = mostrar_categorias(mi_ruta)
+        # Elegir categoria
+        mi_categoria = elegir_categoria(mis_categorias)
+        # Mostrar recetas
+        mis_recetas = mostrar_recetas(mi_categoria)
+        # Elegir recetas
+        mi_receta = elegir_receta(mis_recetas)
+        # leer receta
+        leer_receta(mi_receta)
+        # Volver al inicio
+        volver_inicio()
+        pass
 
 # ! Crear una Receta
-elif menu == 2:
-    # Mostrar Categorias
-    mis_categorias = mostrar_categorias(mi_ruta)
-    # Elegir categoria
-    mi_categoria = elegir_categoria(mis_categorias)
-    # Crear Receta
-    # Volver Inicio
-    pass
+    elif menu == 2:
+        # Mostrar Categorias
+        mis_categorias = mostrar_categorias(mi_ruta)
+        # Elegir categoria
+        mi_categoria = elegir_categoria(mis_categorias)
+        # Crear Receta
+        crear_receta(mi_categoria)
+        # Volver Inicio
+        volver_inicio()
+        pass
 
 # ! Crear una Categoria Nueva
-elif menu == 3:
-    # Crear categoria
-    # volver inicio
-    pass
+    elif menu == 3:
+        # Crear categoria
+        crear_categoria(mi_ruta)
+        # volver inicio
+        volver_inicio()
+        pass
 
 # ! Eliminar una receta
-elif menu == 4:
-    # mostrar categorias
-    mis_categorias = mostrar_categorias(mi_ruta)
-    # elegir categoria
-    mi_categoria = elegir_categoria(mis_categorias)
-    # mostrar recetas
-    mis_recetas = mostrar_recetas(mi_categoria)
-    # elegir receta
-    mi_receta = elegir_receta(mis_recetas)
-    # eliminar receta
-    # volver a inicio
-    pass
+    elif menu == 4:
+        # mostrar categorias
+        mis_categorias = mostrar_categorias(mi_ruta)
+        # elegir categoria
+        mi_categoria = elegir_categoria(mis_categorias)
+        # mostrar recetas
+        mis_recetas = mostrar_recetas(mi_categoria)
+        # elegir receta
+        mi_receta = elegir_receta(mis_recetas)
+        # eliminar receta
+        eliminar_receta(mi_receta)
+        # volver a inicio
+        volver_inicio()
+        pass
 
 # ! Eliminar una Categoria
-elif menu == 5:
-    # mostrar categorias
-    mis_categorias = mostrar_categorias(mi_ruta)
-    # elegir categoria
-    mi_categoria = elegir_categoria(mis_categorias)
-    # eliminar categoria
-    # volver al inicio
-    pass
+    elif menu == 5:
+        # mostrar categorias
+        mis_categorias = mostrar_categorias(mi_ruta)
+        # elegir categoria
+        mi_categoria = elegir_categoria(mis_categorias)
+        # eliminar categoria
+        eliminar_categoria(mi_categoria)
+        # volver al inicio
+        volver_inicio()
+        pass
 
 # ! Finalizar el programa
-elif menu == 6:
-    # finalizar
-    pass
+    elif menu == 6:
+        finalizar_programa = True
+        # finalizar
+        pass
+
+
